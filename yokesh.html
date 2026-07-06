@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Registration Form</title>
+</head>
+<body>
+
+<h2>Student Attendance Registration</h2>
+
+<form>
+
+<fieldset>
+<legend>Registration Form</legend>
+
+<label>Student Name:</label>
+<input type="text" name="name"><br><br>
+
+<label>Roll Number:</label>
+<input type="text" name="roll"><br><br>
+
+<label>Email:</label>
+<input type="email" name="email"><br><br>
+
+<label>Password:</label>
+<input type="password" name="password"><br><br>
+
+<label>Date:</label>
+<input type="date" name="date"><br><br>
+
+<label>Department:</label>
+<select name="department">
+    <option>CSE</option>
+    <option>ECE</option>
+    <option>EEE</option>
+    <option>Mechanical</option>
+    <option>Civil</option>
+</select>
+<br><br>
+
+<label>Subjects (List Box):</label>
+<select multiple size="4">
+    <option>HTML</option>
+    <option>CSS</option>
+    <option>JavaScript</option>
+    <option>Python</option>
+</select>
+<br><br>
+
+<label>Gender:</label>
+<input type="radio" name="gender"> Male
+<input type="radio" name="gender"> Female
+<br><br>
+
+<label>Attendance Status:</label>
+<input type="radio" name="attendance"> Present
+<input type="radio" name="attendance"> Absent
+<br><br>
+
+<label>Skills:</label>
+<input type="checkbox"> HTML
+<input type="checkbox"> CSS
+<input type="checkbox"> JavaScript
+<br><br>
+
+<label>Address:</label><br>
+<textarea rows="4" cols="30"></textarea>
+<br><br>
+
+<button type="submit">Register</button>
+<button type="reset">Reset</button>
+
+</fieldset>
+
+</form>
+
+</body>
+</html>

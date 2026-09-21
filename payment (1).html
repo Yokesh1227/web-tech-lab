@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Payment</title>
+<style>
+  :root{
+    --ink:#1b1033;
+    --paper:#fdf3e7;
+    --panel:#ffffff;
+    --line:#f0ddc8;
+    --gold:#e0762f;
+    --violet:#6d4aff;
+    --teal:#0fa88a;
+    --error:#e0473f;
+    --success:#0fa88a;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#f3ecff;
+      --paper:#1a1030;
+      --panel:#241a3d;
+      --line:#3a2c5c;
+      --gold:#f2934f;
+      --violet:#9a80ff;
+      --teal:#2fd9b6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#f3ecff;
+    --paper:#1a1030;
+    --panel:#241a3d;
+    --line:#3a2c5c;
+    --gold:#f2934f;
+    --violet:#9a80ff;
+    --teal:#2fd9b6;
+  }
+  *{box-sizing:border-box}
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--violet) 22%, transparent), transparent 45%),
+      radial-gradient(circle at 90% 15%, color-mix(in srgb, var(--teal) 20%, transparent), transparent 40%),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;
+    min-height:100%;
+    display:flex;
+    justify-content:center;
+    padding:48px 20px;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+  .stage{
+    width:100%;
+    max-width:920px;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:40px;
+  }
+  @media (max-width:760px){
+    .stage{grid-template-columns:1fr; gap:28px}
+  }
+
+  h1{
+    font-family:"Fraunces",serif;
+    font-weight:560;
+    font-size:clamp(28px,4vw,36px);
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    margin:0 0 32px;
+    color:var(--ink);
+    opacity:0.62;
+    font-size:15px;
+  }
+
+  .summary{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-top:4px solid var(--violet);
+    border-radius:14px;
+    padding:28px;
+    height:fit-content;
+  }
+  .summary h2{
+    font-family:"Fraunces",serif;
+    font-weight:400;
+    font-size:19px;
+    margin:0 0 18px;
+  }
+  .row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    font-size:14.5px;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-of-type{border-bottom:none}
+  .row .name{opacity:0.75}
+  .total{
+    display:flex;
+    justify-content:space-between;
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid var(--ink);
+    font-family:"Fraunces",serif;
+    font-size:20px;
+  }
+  .total span:last-child{color:var(--violet)}
+
+  form{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-top:4px solid var(--teal);
+    border-radius:14px;
+    padding:28px;
+  }
+  .field{margin-bottom:18px}
+  .field label{
+    display:block;
+    font-size:12.5px;
+    margin-bottom:6px;
+    opacity:0.7;
+  }
+  .field input{
+    width:100%;
+    padding:12px 13px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    font-size:15px;
+    font-family:inherit;
+  }
+  .field input:focus{
+    outline:2px solid var(--teal);
+    outline-offset:1px;
+  }
+  .field.invalid input{border-color:var(--error)}
+  .field .err{
+    display:none;
+    font-size:12.5px;
+    color:var(--error);
+    margin-top:5px;
+  }
+  .field.invalid .err{display:block}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+
+  .qty{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .qty button{
+    width:34px;
+    height:34px;
+    padding:0;
+    margin:0;
+    border-radius:8px;
+    font-size:17px;
+    line-height:1;
+    flex:none;
+    background:var(--violet);
+    color:#fff;
+  }
+  .qty span{
+    min-width:22px;
+    text-align:center;
+    font-size:15.5px;
+    font-weight:600;
+    color:var(--violet);
+  }
+  .rate{opacity:0.85; font-size:12.5px; margin-left:6px; color:var(--gold); font-weight:600}
+
+  button{
+    width:100%;
+    padding:14px;
+    margin-top:6px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(120deg, var(--violet), var(--teal));
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button:active{transform:translateY(1px)}
+  .lock{opacity:0.55; font-size:12.5px; margin-top:14px; text-align:center}
+
+  .success{
+    display:none;
+    text-align:center;
+    padding:40px 20px;
+  }
+  .success.show{display:block}
+  form.hide, .summary.hide{display:none}
+  .success .mark{
+    width:48px;height:48px;border-radius:50%;
+    background:linear-gradient(120deg, var(--teal), var(--violet));
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;
+    font-size:22px;
+  }
+  .success h2{
+    font-family:"Fraunces",serif;
+    font-weight:560;
+    margin:0 0 8px;
+  }
+  .otp-row{
+    display:flex;
+    gap:10px;
+    margin-top:4px;
+  }
+  .otp-row input{
+    flex:1;
+    text-align:center;
+    letter-spacing:2px;
+  }
+  .hint{font-size:12.5px; opacity:0.65; margin-top:6px}
+  .hint.accent{color:var(--teal); opacity:1; font-weight:600}
+  .send-otp{
+    width:auto;
+    padding:10px 14px;
+    font-size:13px;
+    margin-top:0;
+    flex:none;
+  }
+  .mobile-row{display:flex; gap:10px; align-items:stretch}
+  .mobile-row .field{flex:1; margin-bottom:0}
+  button:disabled{opacity:0.5; cursor:not-allowed}
+  .success p{opacity:0.65; font-size:14.5px; margin:0}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div>
+    <h1>Complete your payment</h1>
+    <p class="sub">Order #A-4471 · Secure checkout</p>
+    <div class="summary" id="summaryCard">
+      <h2>Order summary</h2>
+      <div class="row">
+        <span class="name">Slot booking <span class="rate">(₹300 / slot)</span></span>
+        <div class="qty">
+          <button type="button" id="qtyMinus">−</button>
+          <span id="qtyVal">1</span>
+          <button type="button" id="qtyPlus">+</button>
+        </div>
+      </div>
+      <div class="row"><span class="name">Subtotal</span><span id="subtotalVal">₹300.00</span></div>
+      <div class="row"><span class="name">Processing fee</span><span id="feeVal">₹8.50</span></div>
+      <div class="total"><span>Total due</span><span id="totalVal">₹308.50</span></div>
+    </div>
+  </div>
+
+  <div>
+    <form id="upiForm" novalidate>
+      <div class="mobile-row">
+        <div class="field" id="f-mobile">
+          <label for="mobileNumber">Mobile number</label>
+          <input id="mobileNumber" inputmode="numeric" autocomplete="tel" placeholder="98765 43210" maxlength="10">
+          <div class="err">Enter a valid 10-digit mobile number.</div>
+        </div>
+        <button type="button" class="send-otp" id="sendOtpBtn" style="margin-top:20px">Send OTP</button>
+      </div>
+      <p class="hint" id="otpHint">We'll send a 6-digit code to verify this number.</p>
+
+      <div class="field" id="f-otp" style="margin-top:16px; display:none">
+        <label for="otpCode">Enter OTP</label>
+        <div class="otp-row">
+          <input id="otpCode" inputmode="numeric" placeholder="6-digit code" maxlength="6">
+          <button type="button" class="send-otp" id="resendOtpBtn">Resend</button>
+        </div>
+        <div class="err">Enter the 6-digit code sent to your mobile.</div>
+      </div>
+
+      <button type="submit" id="payBtnUpi" disabled>Verify &amp; pay ₹308.50</button>
+      <div class="lock">Payments are encrypted end to end.</div>
+    </form>
+
+    <div class="success" id="successCard">
+      <div class="mark">✓</div>
+      <h2>Payment received</h2>
+      <p id="successMsg">A receipt has been sent to your email. Order #A-4471 is confirmed.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const RATE = 300;
+const FEE = 8.50;
+let qty = 1;
+
+const qtyVal = document.getElementById('qtyVal');
+const subtotalVal = document.getElementById('subtotalVal');
+const feeVal = document.getElementById('feeVal');
+const totalVal = document.getElementById('totalVal');
+const payBtnUpi = document.getElementById('payBtnUpi');
+const successMsg = document.getElementById('successMsg');
+
+function fmt(n){ return '₹' + n.toFixed(2); }
+
+function renderTotals(){
+  const subtotal = RATE * qty;
+  const total = subtotal + FEE;
+  qtyVal.textContent = qty;
+  subtotalVal.textContent = fmt(subtotal);
+  feeVal.textContent = fmt(FEE);
+  totalVal.textContent = fmt(total);
+  payBtnUpi.textContent = 'Verify & pay ' + fmt(total);
+}
+renderTotals();
+
+document.getElementById('qtyMinus').addEventListener('click', () => {
+  if(qty > 1){ qty--; renderTotals(); }
+});
+document.getElementById('qtyPlus').addEventListener('click', () => {
+  qty++; renderTotals();
+});
+
+const upiForm = document.getElementById('upiForm');
+
+// UPI / mobile OTP flow (simulated in-browser, no real SMS is sent)
+const mobileInput = document.getElementById('mobileNumber');
+const sendOtpBtn = document.getElementById('sendOtpBtn');
+const resendOtpBtn = document.getElementById('resendOtpBtn');
+const otpField = document.getElementById('f-otp');
+const otpInput = document.getElementById('otpCode');
+const otpHint = document.getElementById('otpHint');
+let generatedOtp = null;
+
+mobileInput.addEventListener('input', () => {
+  mobileInput.value = mobileInput.value.replace(/\D/g,'').slice(0,10);
+});
+otpInput.addEventListener('input', () => {
+  otpInput.value = otpInput.value.replace(/\D/g,'').slice(0,6);
+  payBtnUpi.disabled = otpInput.value.length !== 6;
+});
+
+function sendOtp(){
+  const mobile = mobileInput.value;
+  if(!/^[6-9]\d{9}$/.test(mobile)){
+    setInvalid('f-mobile', true);
+    return;
+  }
+  setInvalid('f-mobile', false);
+  generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+  otpField.style.display = 'block';
+  otpInput.value = '';
+  payBtnUpi.disabled = true;
+  otpHint.textContent = 'Demo mode — your OTP is ' + generatedOtp + ' (a real setup sends this by SMS).';
+  otpHint.classList.add('accent');
+}
+sendOtpBtn.addEventListener('click', sendOtp);
+resendOtpBtn.addEventListener('click', sendOtp);
+
+function setInvalid(id, invalid){
+  document.getElementById(id).classList.toggle('invalid', invalid);
+}
+
+upiForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if(otpInput.value !== generatedOtp){
+    setInvalid('f-otp', true);
+    return;
+  }
+  setInvalid('f-otp', false);
+
+  successMsg.textContent = qty + (qty === 1 ? ' slot' : ' slots') + ' booked via UPI. A receipt for ' + totalVal.textContent + ' has been sent to your mobile.';
+  upiForm.classList.add('hide');
+  document.getElementById('summaryCard').classList.add('hide');
+  document.getElementById('successCard').classList.add('show');
+});
+</script>
+</body>
+</html>

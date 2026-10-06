@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Customer Care</title>
+<style>
+
+/* ===== 1. THEME VARIABLES ===== */
+:root{
+  --ink:#1b1033; --paper:#fdf3e7; --panel:#fff; --line:#f0ddc8;
+  --gold:#e0762f; --violet:#6d4aff; --teal:#0fa88a; --error:#e0473f;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --ink:#f3ecff; --paper:#1a1030; --panel:#241a3d; --line:#3a2c5c;
+    --gold:#f2934f; --violet:#9a80ff; --teal:#2fd9b6;
+  }
+}
+:root[data-theme=dark]{
+  --ink:#f3ecff; --paper:#1a1030; --panel:#241a3d; --line:#3a2c5c;
+  --gold:#f2934f; --violet:#9a80ff; --teal:#2fd9b6;
+}
+
+/* ===== 2. BASE / LAYOUT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560&family=Source+Sans+3:wght@400;500;600&display=swap');
+*{box-sizing:border-box}
+body{
+  margin:0; padding:48px 20px env(safe-area-inset-bottom,20px);
+  min-height:100%; display:flex; justify-content:center;
+  color:var(--ink); font:15px "Source Sans 3",sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%,color-mix(in srgb,var(--violet) 22%,transparent),transparent 45%),
+    radial-gradient(circle at 90% 15%,color-mix(in srgb,var(--teal) 20%,transparent),transparent 40%),
+    var(--paper);
+}
+.stage{width:100%;max-width:920px}
+
+/* ===== 3. TYPOGRAPHY ===== */
+h1{font:560 clamp(28px,4vw,36px) "Fraunces",serif;margin:0 0 6px}
+.sub{margin:0 0 32px;opacity:.62}
+
+/* ===== 4. CONTACT METHOD CARDS ===== */
+.methods{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
+@media(max-width:480px){.methods{grid-template-columns:1fr}}
+.card{
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:14px; padding:22px; text-decoration:none; color:var(--ink);
+  display:block;
+}
+.card:nth-child(1){border-top:4px solid var(--violet)}
+.card:nth-child(2){border-top:4px solid var(--teal)}
+.card .icon{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;margin-bottom:14px;
+}
+.card:nth-child(1) .icon{background:var(--violet)}
+.card:nth-child(2) .icon{background:var(--teal)}
+.card h3{font:600 15px "Source Sans 3",sans-serif;margin:0 0 4px}
+.card p{margin:0;opacity:.65;font-size:13.5px}
+.card .value{display:block;margin-top:10px;font-weight:600;font-size:14.5px}
+
+/* ===== 5. SUPPORT HOURS STRIP ===== */
+.hours{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:16px 22px;margin-bottom:32px;font-size:13.5px;
+}
+.hours .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);display:inline-block;margin-right:7px}
+
+/* ===== 6. MESSAGE FORM ===== */
+form{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--violet);border-radius:14px;padding:28px}
+form h2{font:400 19px "Fraunces",serif;margin:0 0 20px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12.5px;margin-bottom:6px;opacity:.7}
+.field input,.field textarea{width:100%;padding:12px 13px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);font:15px inherit;resize:vertical}
+.field input:focus,.field textarea:focus{outline:2px solid var(--teal);outline-offset:1px}
+.field.invalid input,.field.invalid textarea{border-color:var(--error)}
+.field .err{display:none;font-size:12.5px;color:var(--error);margin-top:5px}
+.field.invalid .err{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.grid2{grid-template-columns:1fr}}
+
+/* ===== 7. BUTTONS / SUCCESS ===== */
+button{width:100%;padding:14px;margin-top:6px;border:0;border-radius:8px;background:linear-gradient(120deg,var(--violet),var(--teal));color:#fff;font:600 15px inherit;cursor:pointer}
+.success{display:none;text-align:center;padding:40px 20px}
+.success.show{display:block}
+.success p{opacity:.65;margin:0}
+.success h2{font:560 20px "Fraunces",serif;margin:0 0 8px}
+.success .mark{width:48px;height:48px;border-radius:50%;background:linear-gradient(120deg,var(--teal),var(--violet));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:22px}
+form.hide{display:none}
+
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ===== HEADER ===== -->
+  <h1>Customer care</h1>
+  <p class="sub">We usually reply within a few minutes</p>
+
+  <!-- ===== CONTACT METHODS ===== -->
+  <div class="methods">
+    <a class="card" href="tel:+919876543210">
+      <div class="icon">📞</div>
+      <h3>Call us</h3>
+      <p>Speak to our support team</p>
+      <span class="value">+91 98765 43210</span>
+    </a>
+    <a class="card" href="https://wa.me/919876543210" target="_blank" rel="noopener">
+      <div class="icon">💬</div>
+      <h3>WhatsApp</h3>
+      <p>Chat with us anytime</p>
+      <span class="value">+91 98765 43210</span>
+    </a>
+  </div>
+
+  <!-- ===== SUPPORT HOURS ===== -->
+  <div class="hours">
+    <span><span class="dot"></span>Support is online now</span>
+    <span>Mon–Sat, 9:00 AM – 8:00 PM</span>
+  </div>
+
+  <!-- ===== MESSAGE FORM ===== -->
+  <form id="careForm" novalidate>
+    <h2>Send us a message</h2>
+    <div class="field" id="f-name">
+      <label for="custName">Your name</label>
+      <input id="custName" placeholder="Priya Raman">
+      <div class="err">Please enter your name.</div>
+    </div>
+    <div class="grid2">
+      <div class="field" id="f-mobile">
+        <label for="custMobile">Mobile number</label>
+        <input id="custMobile" inputmode="numeric" placeholder="98765 43210" maxlength="10">
+        <div class="err">Enter a valid 10-digit number.</div>
+      </div>
+      <div class="field" id="f-order">
+        <label for="custOrder">Order ID (optional)</label>
+        <input id="custOrder" placeholder="A-4471">
+      </div>
+    </div>
+    <div class="field" id="f-msg">
+      <label for="custMsg">Message</label>
+      <textarea id="custMsg" rows="4" placeholder="Tell us what happened..."></textarea>
+      <div class="err">Please describe your issue.</div>
+    </div>
+    <button type="submit">Submit request</button>
+  </form>
+
+  <!-- ===== SUCCESS STATE ===== -->
+  <div class="success" id="successCard">
+    <div class="mark">✓</div>
+    <h2>Message received</h2>
+    <p id="successMsg">Our team will get back to you shortly on the number you shared.</p>
+  </div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ===== 1. ELEMENT REFERENCES ===== */
+const form        = $('careForm');
+const name        = $('custName');
+const mobile      = $('custMobile');
+const msg         = $('custMsg');
+const successCard = $('successCard');
+const successMsg  = $('successMsg');
+
+/* ===== 2. INPUT RESTRICTIONS ===== */
+name.oninput = () => {
+  name.value = name.value.replace(/[^a-zA-Z\s'.-]/g, '');
+};
+mobile.oninput = () => {
+  mobile.value = mobile.value.replace(/\D/g, '').slice(0, 10);
+};
+
+/* ===== 3. VALIDATION HELPER ===== */
+const setInvalid = (id, isInvalid) => $(id).classList.toggle('invalid', isInvalid);
+
+/* ===== 4. FORM SUBMIT ===== */
+form.onsubmit = (e) => {
+  e.preventDefault();
+  let ok = true;
+
+  if (name.value.trim().length < 2) { setInvalid('f-name', true); ok = false; }
+  else setInvalid('f-name', false);
+
+  if (!/^[6-9]\d{9}$/.test(mobile.value)) { setInvalid('f-mobile', true); ok = false; }
+  else setInvalid('f-mobile', false);
+
+  if (msg.value.trim().length < 5) { setInvalid('f-msg', true); ok = false; }
+  else setInvalid('f-msg', false);
+
+  if (!ok) return;
+
+  successMsg.textContent = `Thanks ${name.value.trim()}, our team will reach out on ${mobile.value} shortly.`;
+  form.classList.add('hide');
+  successCard.classList.add('show');
+};
+</script>
+</body>
+</html>
